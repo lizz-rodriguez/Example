@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Database Structure Generator</title>
+    
+    <!-- HeroUI CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@heroui/theme@latest/dist/index.css">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark">
+    <div class="container">
+        <header class="hero-header">
+            <h1 class="hero-title">🌐 Website Database Structure Generator</h1>
+            <p class="hero-subtitle">Upload documents or select a directory to automatically generate a database structure for your website</p>
+        </header>
+
+        <main>
+            <form id="uploadForm" enctype="multipart/form-data">
+                <!-- Upload Method Selection -->
+                <div class="hero-card">
+                    <div class="hero-card-header">
+                        <h2 class="hero-card-title">Select Input Method</h2>
+                    </div>
+                    <div class="hero-card-body">
+                        <div class="radio-group">
+                            <label class="hero-radio">
+                                <input type="radio" name="inputMethod" value="files" checked>
+                                <span class="hero-radio-label">
+                                    <strong>Upload Files</strong>
+                                    <small>Upload individual documents (PDF, DOC, TXT, JSON, etc.)</small>
+                                </span>
+                            </label>
+                            <label class="hero-radio">
+                                <input type="radio" name="inputMethod" value="directory">
+                                <span class="hero-radio-label">
+                                    <strong>Select Directory</strong>
+                                    <small>Point to a folder containing your content files</small>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- File Upload Section -->
+                <div class="hero-card" id="fileUploadSection">
+                    <div class="hero-card-header">
+                        <h2 class="hero-card-title">Upload Files</h2>
+                    </div>
+                    <div class="hero-card-body">
+                        <div class="upload-area" id="uploadArea">
+                            <input type="file" id="fileInput" name="files" multiple accept=".pdf,.doc,.docx,.txt,.json,.xml,.csv,.md">
+                            <div class="upload-content">
+                                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="17 8 12 3 7 8"></polyline>
+                                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                                </svg>
+                                <p class="upload-text">Drag and drop files here or click to browse</p>
+                                <p class="upload-hint">Supported formats: PDF, DOC, DOCX, TXT, JSON, XML, CSV, MD</p>
+                            </div>
+                        </div>
+                        <div id="fileList" class="file-list"></div>
+                    </div>
+                </div>
+
+                <!-- Directory Selection Section -->
+                <div class="hero-card hidden" id="directorySection">
+                    <div class="hero-card-header">
+                        <h2 class="hero-card-title">Select Directory</h2>
+                    </div>
+                    <div class="hero-card-body">
+                        <div class="hero-input-group">
+                            <input type="text" id="directoryPath" name="directoryPath" placeholder="Enter or browse for directory path" readonly class="hero-input">
+                            <button type="button" id="browseBtn" class="hero-button hero-button-secondary">Browse</button>
+                        </div>
+                        <input type="file" id="directoryInput" webkitdirectory directory multiple style="display: none;">
+                        <p class="help-text">Select a directory containing your content files. All supported files will be processed.</p>
+                        <div id="directoryInfo" class="hero-alert hero-alert-info hidden">
+                            <p><strong>Selected:</strong> <span id="selectedPath"></span></p>
+                            <p><strong>Files found:</strong> <span id="fileCount">0</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Type Configuration -->
+                <div class="hero-card">
+                    <div class="hero-card-header">
+                        <h2 class="hero-card-title">Content Configuration</h2>
+                    </div>
+                    <div class="hero-card-body">
+                        <div class="hero-form-group">
+                            <label for="websiteType" class="hero-label">Website Type</label>
+                            <select id="websiteType" name="websiteType" required class="hero-select">
+                                <option value="">-- Select website type --</option>
+                                <option value="blog">Blog / Articles</option>
+                                <option value="portfolio">Portfolio</option>
+                                <option value="ecommerce">E-commerce</option>
+                                <option value="documentation">Documentation</option>
+                                <option value="corporate">Corporate / Business</option>
+                                <option value="custom">Custom</option>
+                            </select>
+                        </div>
+
+                        <div class="hero-form-group">
+                            <label for="projectName" class="hero-label">Project Name</label>
+                            <input type="text" id="projectName" name="projectName" placeholder="My Awesome Website" required class="hero-input">
+                        </div>
+
+                        <div class="hero-form-group">
+                            <label for="databaseType" class="hero-label">Database Type</label>
+                            <select id="databaseType" name="databaseType" required class="hero-select">
+                                <option value="mysql">MySQL</option>
+                                <option value="postgresql">PostgreSQL</option>
+                                <option value="mongodb">MongoDB</option>
+                                <option value="sqlite">SQLite</option>
+                            </select>
+                        </div>
+
+                        <div class="hero-checkbox-group">
+                            <label class="hero-checkbox">
+                                <input type="checkbox" id="includeImages" name="includeImages" checked>
+                                <span>Extract and manage images</span>
+                            </label>
+                            <label class="hero-checkbox">
+                                <input type="checkbox" id="includeMetadata" name="includeMetadata" checked>
+                                <span>Include metadata (dates, authors, tags)</span>
+                            </label>
+                            <label class="hero-checkbox">
+                                <input type="checkbox" id="generateAPI" name="generateAPI">
+                                <span>Generate REST API endpoints</span>
+                            </label>
+                            <label class="hero-checkbox">
+                                <input type="checkbox" id="autoRelations" name="autoRelations" checked>
+                                <span>Automatically detect relationships</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Options -->
+                <div class="hero-card">
+                    <div class="hero-card-header collapsible-header" id="advancedToggle">
+                        <h2 class="hero-card-title">
+                            Advanced Options
+                            <span class="toggle-icon">▼</span>
+                        </h2>
+                    </div>
+                    <div class="hero-card-body hidden" id="advancedOptions">
+                        <div class="hero-form-group">
+                            <label for="encoding" class="hero-label">File Encoding</label>
+                            <select id="encoding" name="encoding" class="hero-select">
+                                <option value="utf-8">UTF-8</option>
+                                <option value="ascii">ASCII</option>
+                                <option value="latin1">Latin-1</option>
+                            </select>
+                        </div>
+
+                        <div class="hero-form-group">
+                            <label for="tablePrefix" class="hero-label">Database Table Prefix</label>
+                            <input type="text" id="tablePrefix" name="tablePrefix" placeholder="wp_, site_, etc." class="hero-input">
+                        </div>
+
+                        <div class="hero-form-group">
+                            <label for="maxFileSize" class="hero-label">Max File Size (MB)</label>
+                            <input type="number" id="maxFileSize" name="maxFileSize" value="10" min="1" max="100" class="hero-input">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Section -->
+                <div class="hero-card">
+                    <div class="hero-card-body">
+                        <button type="submit" class="hero-button hero-button-primary hero-button-large" id="submitBtn">
+                            <span class="btn-text">Generate Database Structure</span>
+                            <span class="btn-loader hidden"></span>
+                        </button>
+                        <button type="reset" class="hero-button hero-button-secondary hero-button-large" id="resetBtn">Reset Form</button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Results Section -->
+            <div id="resultsSection" class="hero-card hidden">
+                <div class="hero-card-header">
+                    <h2 class="hero-card-title">Generated Database Structure</h2>
+                </div>
+                <div class="hero-card-body">
+                    <div class="hero-tabs">
+                        <div class="hero-tabs-list">
+                            <button class="hero-tab active" data-tab="schema">Schema</button>
+                            <button class="hero-tab" data-tab="preview">Preview</button>
+                            <button class="hero-tab" data-tab="download">Download</button>
+                        </div>
+                        
+                        <div class="hero-tab-content active" id="schemaTab">
+                            <div class="code-block">
+                                <pre id="schemaOutput"><code></code></pre>
+                            </div>
+                        </div>
+
+                        <div class="hero-tab-content hidden" id="previewTab">
+                            <div id="previewContent"></div>
+                        </div>
+
+                        <div class="hero-tab-content hidden" id="downloadTab">
+                            <div class="download-options">
+                                <button class="hero-button hero-button-primary btn-download" data-format="sql">
+                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4m14-7l-5 5-5-5m5 5V3"/>
+                                    </svg>
+                                    Download SQL
+                                </button>
+                                <button class="hero-button hero-button-primary btn-download" data-format="json">
+                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4m14-7l-5 5-5-5m5 5V3"/>
+                                    </svg>
+                                    Download JSON
+                                </button>
+                                <button class="hero-button hero-button-primary btn-download" data-format="prisma">
+                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4m14-7l-5 5-5-5m5 5V3"/>
+                                    </svg>
+                                    Download Prisma Schema
+                                </button>
+                                <button class="hero-button hero-button-primary btn-download" data-format="typescript">
+                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4m14-7l-5 5-5-5m5 5V3"/>
+                                    </svg>
+                                    Download TypeScript Types
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Section -->
+            <div id="progressSection" class="hero-card hidden">
+                <div class="hero-card-body">
+                    <h3 class="text-center">Processing...</h3>
+                    <div class="hero-progress">
+                        <div class="hero-progress-bar" id="progressFill"></div>
+                    </div>
+                    <p id="progressText" class="text-center">Uploading files...</p>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Built with ❤️ for automated database structure generation</p>
+        </footer>
+    </div>
+
+    <!-- HeroUI JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@heroui/theme@latest/dist/index.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
