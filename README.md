@@ -1,16 +1,18 @@
-# Database Structure Generator
+# Data Schema Designer
 
-A powerful web application that automatically generates database structures from uploaded documents or directory contents. Perfect for quickly scaffolding database schemas for your website projects.
+An enterprise-grade database schema generator designed for business applications. Transform your data files into professionally designed database structures with intelligent layout templates and multi-platform support.
 
 ## Features
 
-- 📁 **Multiple Input Methods**: Upload individual files or select entire directories
-- 🎨 **Website Type Templates**: Pre-configured schemas for blogs, portfolios, e-commerce, documentation, corporate sites, and custom projects
+- 📊 **6 Professional Layout Templates**: Relational, Analytical Warehouse, Document Store, Denormalized Performance, Hybrid Multi-Model, and Time-Series Data
+- 📁 **Flexible Input Methods**: Upload individual files or select entire directories
+- � **Business-Centric Templates**: Pre-configured schemas for CRM, E-Commerce, Inventory, HR, Financial, Analytics, and more
 - 💾 **Multi-Database Support**: Generate schemas for MySQL, PostgreSQL, MongoDB, and SQLite
-- 🔄 **Smart Content Analysis**: Automatically analyzes JSON, CSV, XML, Markdown, and text files
+- 🔄 **Smart Content Analysis**: Automatically analyzes JSON, CSV, XML, Markdown, PDF, DOC, and text files
 - 📊 **Multiple Export Formats**: Download as SQL, JSON, Prisma schema, or TypeScript types
 - ⚡ **Real-time Preview**: See your database structure before downloading
-- 🎯 **Flexible Configuration**: Include metadata, images, API endpoints, and auto-detect relationships
+- � **Clean UI**: Professional light theme design inspired by Shopify's interface
+- 🔧 **Advanced Configuration**: Encoding options, table prefixes, audit fields, and auto-relationships
 
 ## Installation
 
@@ -39,23 +41,27 @@ http://localhost:3000
 
 1. **Select Input Method**
    - Choose to upload individual files or select a directory
-   - Supported file types: PDF, DOC, DOCX, TXT, JSON, XML, CSV, MD
+   - Supported file types: JSON, CSV, XML, PDF, DOC, DOCX, TXT, MD
 
-2. **Configure Your Project**
-   - Choose website type (blog, portfolio, e-commerce, etc.)
+2. **Choose Data Layout Template**
+   - Select from 6 professional layout options optimized for different use cases
+   - Relational, Analytical, Document, Denormalized, Hybrid, or Time-Series
+
+3. **Configure Your Project**
+   - Choose business application type (CRM, E-Commerce, Analytics, HR, Financial, etc.)
    - Enter project name
-   - Select database type (MySQL, PostgreSQL, MongoDB, SQLite)
+   - Select target database platform (MySQL, PostgreSQL, MongoDB, SQLite)
 
-3. **Customize Options**
-   - Toggle image management
-   - Include metadata tables
-   - Generate REST API endpoints
-   - Auto-detect relationships
+4. **Customize Options**
+   - Toggle media/asset management
+   - Include audit fields (timestamps, authors, versions)
+   - Generate REST API documentation
+   - Auto-detect relationships and foreign keys
 
-4. **Generate & Download**
-   - Click "Generate Database Structure"
-   - Review the generated schema
-   - Download in your preferred format (SQL, JSON, Prisma, TypeScript)
+5. **Generate & Export**
+   - Click "Generate Database Schema"
+   - Review the generated structure
+   - Export in your preferred format (SQL, JSON, Prisma, TypeScript)
 
 ### File Upload
 
@@ -69,33 +75,39 @@ http://localhost:3000
 - All supported files in the directory will be processed
 - View file count before generating
 
-### Website Types
+## Data Layout Templates
 
-#### Blog
-- Posts, categories, tags, authors, comments tables
-- Perfect for content-driven websites
+### Relational Standard (Recommended)
+Traditional normalized schema with foreign keys and relationships. Best for transactional business applications with complex data relationships.
 
-#### Portfolio
-- Projects, skills, and relationships
-- Ideal for showcasing work
+### Analytical Warehouse
+Star schema optimized for data warehousing and business intelligence. Ideal for reporting and analytics workloads.
 
-#### E-commerce
-- Products, categories, orders, customers
-- Complete online store structure
+### Document Store
+Flexible JSON-based schema for MongoDB and NoSQL databases. Perfect for semi-structured or rapidly evolving data models.
 
-#### Documentation
-- Pages, sections, hierarchical structure
-- Great for knowledge bases
+### Denormalized Performance
+Optimized for read-heavy workloads with redundant data. Suitable for high-performance applications with minimal writes.
 
-#### Corporate
-- Pages, team members, services
-- Professional business websites
+### Hybrid Multi-Model
+Combines relational and document models for maximum flexibility. Great for applications requiring both structured and unstructured data.
 
-#### Custom
-- Generic content tables
-- Flexible structure for any project
+### Time-Series Data
+Optimized for temporal data with timestamps and metrics. Designed for IoT, monitoring, and analytics applications.
 
-## API Endpoints
+### Business Application Types
+
+- **Content Management / Blog**: Posts, categories, tags, authors, comments
+- **E-Commerce / Retail**: Products, orders, customers, inventory, payments
+- **CRM / Customer Data**: Contacts, accounts, opportunities, activities
+- **Inventory Management**: Stock, warehouses, suppliers, purchase orders
+- **Analytics / Reporting**: Metrics, dimensions, facts, aggregations
+- **HR / Employee Management**: Employees, departments, payroll, attendance
+- **Financial / Accounting**: Transactions, accounts, ledgers, invoices
+- **Portfolio / Projects**: Projects, skills, clients, deliverables
+- **Documentation / Knowledge Base**: Articles, sections, categories, versions
+- **Corporate Website**: Pages, team members, services, testimonials
+- **Custom Business Logic**: Flexible schema for unique requirements
 
 ### `POST /api/generate-schema`
 Generate database schema from uploaded files
@@ -121,23 +133,24 @@ Check server status
 ### `GET /api/supported-types`
 Get list of supported file types and database options
 
-## Configuration Options
+## API Endpoints
 
 ### Basic Settings
-- **Project Name**: Name of your website project
-- **Website Type**: Template for database structure
-- **Database Type**: Target database system
+- **Project Name**: Name of your business application
+- **Application Type**: Template for database structure
+- **Database Platform**: Target database system
+- **Layout Template**: Professional schema design pattern
 
 ### Advanced Settings
 - **File Encoding**: UTF-8, ASCII, or Latin-1
-- **Table Prefix**: Add prefix to all table names (e.g., wp_, site_)
-- **Max File Size**: Maximum upload size in MB
+- **Table Prefix**: Add prefix to all table names (e.g., app_, tbl_, prod_)
+- **Max File Size**: Maximum upload size in MB (up to 500MB)
 
 ### Features
-- **Include Images**: Add media management tables
-- **Include Metadata**: Add flexible metadata tables
-- **Generate API**: Plan for REST API endpoints
-- **Auto Relations**: Automatically detect table relationships
+- **Include Media**: Add asset management tables for files and images
+- **Include Audit Fields**: Add timestamps, authors, and version tracking
+- **Generate API Docs**: Plan for REST API endpoints
+- **Auto Relations**: Automatically detect table relationships and foreign keys
 
 ## File Structure
 
@@ -155,20 +168,20 @@ Get list of supported file types and database options
 ## Technologies Used
 
 - **Frontend**: HTML5, CSS3, Vanilla JavaScript
-- **UI Framework**: HeroUI - Modern, dark-themed component library
+- **UI Design**: Custom light theme inspired by Shopify's design system
 - **Backend**: Node.js, Express
 - **File Handling**: Multer
 - **Database Support**: MySQL, PostgreSQL, MongoDB, SQLite
 
-## Design
+## Design Philosophy
 
-The application features a modern dark theme powered by HeroUI components:
-- Gradient hero header with animated effects
-- Dark-mode optimized cards and forms
-- Smooth animations and transitions
-- Responsive design for all screen sizes
-- Custom scrollbar styling
-- Interactive hover states and focus indicators
+The application features a clean, professional light theme designed for business users:
+- Modern Shopify-inspired layout with card-based interface
+- Professional color palette (Shopify green primary: #008060)
+- Clear visual hierarchy with numbered steps
+- Interactive layout selection cards with visual previews
+- Responsive design optimized for desktop and mobile
+- Business-centric terminology and workflows
 
 ## Browser Support
 
@@ -194,13 +207,24 @@ npm run dev
 
 ## Future Enhancements
 
-- [ ] Visual schema editor
-- [ ] Import existing database structures
-- [ ] Migration file generation
-- [ ] Data seeding capabilities
-- [ ] GraphQL schema generation
-- [ ] Docker support
-- [ ] Cloud deployment templates
+- [ ] Visual schema editor with drag-and-drop
+- [ ] Import existing database structures for migration
+- [ ] Automated migration file generation
+- [ ] Sample data generation and seeding
+- [ ] GraphQL schema generation support
+- [ ] Real-time collaboration features
+- [ ] Version control and schema history
+- [ ] Docker deployment templates
+- [ ] Cloud platform integration (AWS, Azure, GCP)
+- [ ] Schema validation and optimization suggestions
+
+## Target Users
+
+- **Data Architects**: Design complex enterprise database schemas
+- **Software Developers**: Quickly scaffold database structures for new projects
+- **Business Analysts**: Transform business requirements into data models
+- **Database Administrators**: Generate standardized schema templates
+- **Product Managers**: Prototype data structures for new features
 
 ## Contributing
 
@@ -216,4 +240,4 @@ For issues, questions, or suggestions, please open an issue in the repository.
 
 ---
 
-Built with ❤️ for automated database structure generation
+Built for enterprise data design and business application development
