@@ -3,18 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website Database Structure Generator</title>
+    <title>Data Schema Designer - Business Database Structure Generator</title>
     
     <!-- HeroUI CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@heroui/theme@latest/dist/index.css">
     
     <link rel="stylesheet" href="styles.css">
 </head>
-<body class="dark">
+<body class="light">
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="container">
+            <div class="nav-brand">
+                <div class="nav-brand-icon">DS</div>
+                Data Schema Designer
+            </div>
+            <div class="nav-actions">
+                <button class="nav-button">Documentation</button>
+                <button class="nav-button">Examples</button>
+            </div>
+        </div>
+    </nav>
+
     <div class="container">
         <header class="hero-header">
-            <h1 class="hero-title">🌐 Website Database Structure Generator</h1>
-            <p class="hero-subtitle">Upload documents or select a directory to automatically generate a database structure for your website</p>
+            <h1 class="hero-title">Enterprise Database Schema Generator</h1>
+            <p class="hero-subtitle">Transform your business data into professionally designed database structures. Upload documents or select directories to automatically generate optimized schemas for any database platform.</p>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-value">50+</div>
+                    <div class="stat-label">Schema Templates</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">4</div>
+                    <div class="stat-label">Database Types</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Automated</div>
+                </div>
+            </div>
         </header>
 
         <main>
@@ -22,7 +50,7 @@
                 <!-- Upload Method Selection -->
                 <div class="hero-card">
                     <div class="hero-card-header">
-                        <h2 class="hero-card-title">Select Input Method</h2>
+                        <h2 class="hero-card-title">1. Choose Input Method</h2>
                     </div>
                     <div class="hero-card-body">
                         <div class="radio-group">
@@ -30,24 +58,150 @@
                                 <input type="radio" name="inputMethod" value="files" checked>
                                 <span class="hero-radio-label">
                                     <strong>Upload Files</strong>
-                                    <small>Upload individual documents (PDF, DOC, TXT, JSON, etc.)</small>
+                                    <small>Upload individual documents (JSON, CSV, XML, PDF, DOC, TXT, MD)</small>
                                 </span>
                             </label>
                             <label class="hero-radio">
                                 <input type="radio" name="inputMethod" value="directory">
                                 <span class="hero-radio-label">
                                     <strong>Select Directory</strong>
-                                    <small>Point to a folder containing your content files</small>
+                                    <small>Point to a folder containing your data files for bulk processing</small>
                                 </span>
                             </label>
                         </div>
                     </div>
                 </div>
 
+                <!-- Data Layout Selection -->
+                <div class="hero-card">
+                    <div class="hero-card-header">
+                        <h2 class="hero-card-title">2. Select Data Layout Template</h2>
+                    </div>
+                    <div class="hero-card-body">
+                        <p class="help-text" style="margin-bottom: 20px;">Choose a pre-designed schema template optimized for your business use case</p>
+                        <div class="layout-grid">
+                            <div class="layout-card selected" data-layout="relational">
+                                <div class="layout-preview">
+                                    <div class="layout-preview-content">
+                                        <div class="layout-bar primary" style="width: 70%;"></div>
+                                        <div class="layout-columns">
+                                            <div class="layout-column"></div>
+                                            <div class="layout-column"></div>
+                                            <div class="layout-column"></div>
+                                        </div>
+                                        <div class="layout-bar" style="width: 50%;"></div>
+                                    </div>
+                                </div>
+                                <div class="layout-info">
+                                    <div class="layout-name">Relational Standard</div>
+                                    <div class="layout-description">Traditional normalized schema with foreign keys and relationships</div>
+                                    <span class="layout-badge recommended">Recommended</span>
+                                </div>
+                            </div>
+
+                            <div class="layout-card" data-layout="analytical">
+                                <div class="layout-preview">
+                                    <div class="layout-preview-content">
+                                        <div class="layout-bar primary" style="width: 100%;"></div>
+                                        <div class="layout-bar" style="width: 90%; margin-top: 4px;"></div>
+                                        <div class="layout-bar" style="width: 85%; margin-top: 4px;"></div>
+                                        <div class="layout-bar" style="width: 80%; margin-top: 4px;"></div>
+                                    </div>
+                                </div>
+                                <div class="layout-info">
+                                    <div class="layout-name">Analytical Warehouse</div>
+                                    <div class="layout-description">Star schema optimized for data warehousing and BI</div>
+                                </div>
+                            </div>
+
+                            <div class="layout-card" data-layout="document">
+                                <div class="layout-preview">
+                                    <div class="layout-preview-content">
+                                        <div style="display: flex; gap: 8px; height: 100%;">
+                                            <div style="flex: 2; display: flex; flex-direction: column; gap: 8px;">
+                                                <div class="layout-bar primary"></div>
+                                                <div class="layout-bar"></div>
+                                                <div class="layout-bar"></div>
+                                            </div>
+                                            <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+                                                <div class="layout-bar"></div>
+                                                <div class="layout-bar"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layout-info">
+                                    <div class="layout-name">Document Store</div>
+                                    <div class="layout-description">Flexible JSON-based schema for MongoDB and NoSQL</div>
+                                </div>
+                            </div>
+
+                            <div class="layout-card" data-layout="denormalized">
+                                <div class="layout-preview">
+                                    <div class="layout-preview-content">
+                                        <div class="layout-bar primary" style="width: 100%;"></div>
+                                        <div class="layout-bar" style="width: 100%; margin-top: 8px;"></div>
+                                        <div class="layout-columns" style="margin-top: 8px;">
+                                            <div class="layout-column"></div>
+                                            <div class="layout-column"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layout-info">
+                                    <div class="layout-name">Denormalized Performance</div>
+                                    <div class="layout-description">Optimized for read-heavy workloads with redundant data</div>
+                                </div>
+                            </div>
+
+                            <div class="layout-card" data-layout="hybrid">
+                                <div class="layout-preview">
+                                    <div class="layout-preview-content">
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; height: 100%;">
+                                            <div style="display: flex; flex-direction: column; gap: 6px;">
+                                                <div class="layout-bar primary"></div>
+                                                <div class="layout-bar"></div>
+                                            </div>
+                                            <div style="display: flex; flex-direction: column; gap: 6px;">
+                                                <div class="layout-bar"></div>
+                                                <div class="layout-bar primary"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layout-info">
+                                    <div class="layout-name">Hybrid Multi-Model</div>
+                                    <div class="layout-description">Combines relational and document models for flexibility</div>
+                                </div>
+                            </div>
+
+                            <div class="layout-card" data-layout="timeseries">
+                                <div class="layout-preview">
+                                    <div class="layout-preview-content">
+                                        <div class="layout-bar primary" style="width: 40%;"></div>
+                                        <div style="display: flex; gap: 4px; margin-top: 8px; flex: 1;">
+                                            <div class="layout-bar" style="width: 10px;"></div>
+                                            <div class="layout-bar" style="width: 15px;"></div>
+                                            <div class="layout-bar" style="width: 20px;"></div>
+                                            <div class="layout-bar" style="width: 12px;"></div>
+                                            <div class="layout-bar" style="width: 18px;"></div>
+                                            <div class="layout-bar" style="width: 14px;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layout-info">
+                                    <div class="layout-name">Time-Series Data</div>
+                                    <div class="layout-description">Optimized for temporal data with timestamps and metrics</div>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="selectedLayout" name="selectedLayout" value="relational">
+                    </div>
+                </div>
+
                 <!-- File Upload Section -->
                 <div class="hero-card" id="fileUploadSection">
                     <div class="hero-card-header">
-                        <h2 class="hero-card-title">Upload Files</h2>
+                        <h2 class="hero-card-title">3. Upload Data Files</h2>
                     </div>
                     <div class="hero-card-body">
                         <div class="upload-area" id="uploadArea">
@@ -58,8 +212,8 @@
                                     <polyline points="17 8 12 3 7 8"></polyline>
                                     <line x1="12" y1="3" x2="12" y2="15"></line>
                                 </svg>
-                                <p class="upload-text">Drag and drop files here or click to browse</p>
-                                <p class="upload-hint">Supported formats: PDF, DOC, DOCX, TXT, JSON, XML, CSV, MD</p>
+                                <p class="upload-text">Drag and drop files or click to browse</p>
+                                <p class="upload-hint">Supported: JSON, CSV, XML, PDF, DOC, DOCX, TXT, MD • Max 100MB per file</p>
                             </div>
                         </div>
                         <div id="fileList" class="file-list"></div>
@@ -69,15 +223,15 @@
                 <!-- Directory Selection Section -->
                 <div class="hero-card hidden" id="directorySection">
                     <div class="hero-card-header">
-                        <h2 class="hero-card-title">Select Directory</h2>
+                        <h2 class="hero-card-title">3. Select Data Directory</h2>
                     </div>
                     <div class="hero-card-body">
                         <div class="hero-input-group">
-                            <input type="text" id="directoryPath" name="directoryPath" placeholder="Enter or browse for directory path" readonly class="hero-input">
+                            <input type="text" id="directoryPath" name="directoryPath" placeholder="Choose directory containing data files" readonly class="hero-input">
                             <button type="button" id="browseBtn" class="hero-button hero-button-secondary">Browse</button>
                         </div>
                         <input type="file" id="directoryInput" webkitdirectory directory multiple style="display: none;">
-                        <p class="help-text">Select a directory containing your content files. All supported files will be processed.</p>
+                        <p class="help-text">All supported files in the directory will be analyzed and processed automatically.</p>
                         <div id="directoryInfo" class="hero-alert hero-alert-info hidden">
                             <p><strong>Selected:</strong> <span id="selectedPath"></span></p>
                             <p><strong>Files found:</strong> <span id="fileCount">0</span></p>
@@ -88,29 +242,34 @@
                 <!-- Content Type Configuration -->
                 <div class="hero-card">
                     <div class="hero-card-header">
-                        <h2 class="hero-card-title">Content Configuration</h2>
+                        <h2 class="hero-card-title">4. Configure Schema Settings</h2>
                     </div>
                     <div class="hero-card-body">
                         <div class="hero-form-group">
-                            <label for="websiteType" class="hero-label">Website Type</label>
+                            <label for="websiteType" class="hero-label">Business Application Type</label>
                             <select id="websiteType" name="websiteType" required class="hero-select">
-                                <option value="">-- Select website type --</option>
-                                <option value="blog">Blog / Articles</option>
-                                <option value="portfolio">Portfolio</option>
-                                <option value="ecommerce">E-commerce</option>
-                                <option value="documentation">Documentation</option>
-                                <option value="corporate">Corporate / Business</option>
-                                <option value="custom">Custom</option>
+                                <option value="">-- Select application type --</option>
+                                <option value="blog">Content Management / Blog</option>
+                                <option value="ecommerce">E-Commerce / Retail</option>
+                                <option value="crm">CRM / Customer Data</option>
+                                <option value="inventory">Inventory Management</option>
+                                <option value="analytics">Analytics / Reporting</option>
+                                <option value="hr">HR / Employee Management</option>
+                                <option value="financial">Financial / Accounting</option>
+                                <option value="portfolio">Portfolio / Projects</option>
+                                <option value="documentation">Documentation / Knowledge Base</option>
+                                <option value="corporate">Corporate Website</option>
+                                <option value="custom">Custom Business Logic</option>
                             </select>
                         </div>
 
                         <div class="hero-form-group">
                             <label for="projectName" class="hero-label">Project Name</label>
-                            <input type="text" id="projectName" name="projectName" placeholder="My Awesome Website" required class="hero-input">
+                            <input type="text" id="projectName" name="projectName" placeholder="e.g., Customer Management System" required class="hero-input">
                         </div>
 
                         <div class="hero-form-group">
-                            <label for="databaseType" class="hero-label">Database Type</label>
+                            <label for="databaseType" class="hero-label">Target Database Platform</label>
                             <select id="databaseType" name="databaseType" required class="hero-select">
                                 <option value="mysql">MySQL</option>
                                 <option value="postgresql">PostgreSQL</option>
@@ -119,22 +278,24 @@
                             </select>
                         </div>
 
+                        <hr class="section-divider">
+
                         <div class="hero-checkbox-group">
                             <label class="hero-checkbox">
                                 <input type="checkbox" id="includeImages" name="includeImages" checked>
-                                <span>Extract and manage images</span>
+                                <span>Include media/asset management tables</span>
                             </label>
                             <label class="hero-checkbox">
                                 <input type="checkbox" id="includeMetadata" name="includeMetadata" checked>
-                                <span>Include metadata (dates, authors, tags)</span>
+                                <span>Add audit fields (timestamps, authors, versions)</span>
                             </label>
                             <label class="hero-checkbox">
                                 <input type="checkbox" id="generateAPI" name="generateAPI">
-                                <span>Generate REST API endpoints</span>
+                                <span>Generate REST API endpoint documentation</span>
                             </label>
                             <label class="hero-checkbox">
                                 <input type="checkbox" id="autoRelations" name="autoRelations" checked>
-                                <span>Automatically detect relationships</span>
+                                <span>Auto-detect relationships and foreign keys</span>
                             </label>
                         </div>
                     </div>
@@ -144,7 +305,7 @@
                 <div class="hero-card">
                     <div class="hero-card-header collapsible-header" id="advancedToggle">
                         <h2 class="hero-card-title">
-                            Advanced Options
+                            Advanced Configuration
                             <span class="toggle-icon">▼</span>
                         </h2>
                     </div>
@@ -152,20 +313,21 @@
                         <div class="hero-form-group">
                             <label for="encoding" class="hero-label">File Encoding</label>
                             <select id="encoding" name="encoding" class="hero-select">
-                                <option value="utf-8">UTF-8</option>
+                                <option value="utf-8">UTF-8 (Universal)</option>
                                 <option value="ascii">ASCII</option>
-                                <option value="latin1">Latin-1</option>
+                                <option value="latin1">Latin-1 (ISO-8859-1)</option>
                             </select>
                         </div>
 
                         <div class="hero-form-group">
-                            <label for="tablePrefix" class="hero-label">Database Table Prefix</label>
-                            <input type="text" id="tablePrefix" name="tablePrefix" placeholder="wp_, site_, etc." class="hero-input">
+                            <label for="tablePrefix" class="hero-label">Table Naming Prefix</label>
+                            <input type="text" id="tablePrefix" name="tablePrefix" placeholder="e.g., app_, tbl_, prod_" class="hero-input">
+                            <p class="help-text">Optional prefix for all generated table names</p>
                         </div>
 
                         <div class="hero-form-group">
-                            <label for="maxFileSize" class="hero-label">Max File Size (MB)</label>
-                            <input type="number" id="maxFileSize" name="maxFileSize" value="10" min="1" max="100" class="hero-input">
+                            <label for="maxFileSize" class="hero-label">Maximum File Size (MB)</label>
+                            <input type="number" id="maxFileSize" name="maxFileSize" value="100" min="1" max="500" class="hero-input">
                         </div>
                     </div>
                 </div>
@@ -174,10 +336,10 @@
                 <div class="hero-card">
                     <div class="hero-card-body">
                         <button type="submit" class="hero-button hero-button-primary hero-button-large" id="submitBtn">
-                            <span class="btn-text">Generate Database Structure</span>
+                            <span class="btn-text">Generate Database Schema</span>
                             <span class="btn-loader hidden"></span>
                         </button>
-                        <button type="reset" class="hero-button hero-button-secondary hero-button-large" id="resetBtn">Reset Form</button>
+                        <button type="reset" class="hero-button hero-button-secondary hero-button-large" id="resetBtn">Reset Configuration</button>
                     </div>
                 </div>
             </form>
@@ -185,14 +347,14 @@
             <!-- Results Section -->
             <div id="resultsSection" class="hero-card hidden">
                 <div class="hero-card-header">
-                    <h2 class="hero-card-title">Generated Database Structure</h2>
+                    <h2 class="hero-card-title">Generated Schema Results</h2>
                 </div>
                 <div class="hero-card-body">
                     <div class="hero-tabs">
                         <div class="hero-tabs-list">
-                            <button class="hero-tab active" data-tab="schema">Schema</button>
-                            <button class="hero-tab" data-tab="preview">Preview</button>
-                            <button class="hero-tab" data-tab="download">Download</button>
+                            <button class="hero-tab active" data-tab="schema">SQL Schema</button>
+                            <button class="hero-tab" data-tab="preview">Structure Preview</button>
+                            <button class="hero-tab" data-tab="download">Export Options</button>
                         </div>
                         
                         <div class="hero-tab-content active" id="schemaTab">
@@ -240,17 +402,18 @@
             <!-- Progress Section -->
             <div id="progressSection" class="hero-card hidden">
                 <div class="hero-card-body">
-                    <h3 class="text-center">Processing...</h3>
+                    <h3 class="text-center" style="margin-bottom: 16px; color: var(--hero-text-primary);">Processing Your Data...</h3>
                     <div class="hero-progress">
                         <div class="hero-progress-bar" id="progressFill"></div>
                     </div>
-                    <p id="progressText" class="text-center">Uploading files...</p>
+                    <p id="progressText" class="text-center" style="color: var(--hero-text-subdued);">Initializing...</p>
                 </div>
             </div>
         </main>
 
         <footer>
-            <p>Built with ❤️ for automated database structure generation</p>
+            <p>© 2025 Data Schema Designer • Enterprise Database Structure Generator</p>
+            <p style="margin-top: 8px; font-size: 0.85em;">Built for data architects, developers, and business analysts</p>
         </footer>
     </div>
 

@@ -19,14 +19,17 @@ const progressText = document.getElementById('progressText');
 const resultsSection = document.getElementById('resultsSection');
 const advancedToggle = document.getElementById('advancedToggle');
 const advancedOptions = document.getElementById('advancedOptions');
+const selectedLayoutInput = document.getElementById('selectedLayout');
 
 // State
 let selectedFiles = [];
 let selectedDirectory = null;
+let currentLayout = 'relational';
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
+    initializeLayoutSelection();
 });
 
 function setupEventListeners() {
@@ -53,13 +56,34 @@ function setupEventListeners() {
     advancedToggle.addEventListener('click', toggleAdvancedOptions);
 
     // Tab navigation
-    document.querySelectorAll('.tab-btn').forEach(btn => {
+    document.querySelectorAll('.hero-tab').forEach(btn => {
         btn.addEventListener('click', handleTabChange);
     });
 
     // Download buttons
     document.querySelectorAll('.btn-download').forEach(btn => {
         btn.addEventListener('click', handleDownload);
+    });
+}
+
+// Layout Selection
+function initializeLayoutSelection() {
+    const layoutCards = document.querySelectorAll('.layout-card');
+    
+    layoutCards.forEach(card => {
+        card.addEventListener('click', () => {
+            // Remove selected class from all cards
+            layoutCards.forEach(c => c.classList.remove('selected'));
+            
+            // Add selected class to clicked card
+            card.classList.add('selected');
+            
+            // Update current layout
+            currentLayout = card.dataset.layout;
+            selectedLayoutInput.value = currentLayout;
+            
+            console.log('Selected layout:', currentLayout);
+        });
     });
 }
 
@@ -188,6 +212,7 @@ async function handleFormSubmit(e) {
     // Prepare form data
     const formData = new FormData();
     formData.append('inputMethod', inputMethod);
+    formData.append('selectedLayout', currentLayout);
     formData.append('websiteType', document.getElementById('websiteType').value);
     formData.append('projectName', document.getElementById('projectName').value);
     formData.append('databaseType', document.getElementById('databaseType').value);
