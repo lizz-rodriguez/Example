@@ -380,6 +380,40 @@ body {
   font-size: 0.98rem;
 }
 
+.documentation-modal-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 16px;
+}
+
+.documentation-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  border-radius: 10px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--ink-mid);
+  border: 1px solid rgba(232, 209, 223, 0.9);
+  background: rgba(255, 248, 252, 0.78);
+  box-shadow: none;
+}
+
+.documentation-pill::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 116, 176, 0.92),
+    rgba(255, 180, 121, 0.9)
+  );
+}
+
 .documentation-modal-subtitle {
   margin: 0 0 10px;
   color: var(--ink-dark);
@@ -392,6 +426,11 @@ body {
   color: var(--ink-mid);
   display: grid;
   gap: 8px;
+}
+
+.documentation-modal-list li::marker {
+  color: #ff6fa9;
+  font-weight: 800;
 }
 
 /* ─── Hero Header ─── */
