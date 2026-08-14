@@ -13,7 +13,7 @@
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+  <body data-api-base-url="">
     <!-- Top Navigation -->
     <nav class="top-nav">
       <div class="container">
@@ -700,6 +700,26 @@
                             />
                             <p class="help-text">
                               Optional prefix for all generated table names
+                            </p>
+                          </div>
+                          <div
+                            class="hero-form-group config-advanced-grid-wide"
+                          >
+                            <label for="apiBaseUrl" class="hero-label"
+                              >Schema API Base URL</label
+                            >
+                            <input
+                              type="url"
+                              id="apiBaseUrl"
+                              placeholder="https://your-backend-domain.com"
+                              class="hero-input"
+                              inputmode="url"
+                              autocomplete="off"
+                              spellcheck="false"
+                            />
+                            <p class="help-text">
+                              Optional for deployed frontend. Leave blank to use
+                              the same domain.
                             </p>
                           </div>
                         </div>

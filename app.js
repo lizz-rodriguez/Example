@@ -29,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
   bindFileUpload();
   bindDirectoryUpload();
   bindAdvancedToggle();
+  bindApiBaseUrlSetting();
   bindResultsFullscreen();
   bindTabs();
   bindDownloads();
@@ -546,6 +547,42 @@ function bindAdvancedToggle() {
   });
 }
 
+function getConfiguredApiBaseUrl() {
+  const explicitBase =
+    window.__SCHEMA_API_BASE_URL__ ||
+    document.body?.dataset?.apiBaseUrl ||
+    localStorage.getItem("schemaApiBaseUrl") ||
+    "";
+
+  return explicitBase.trim().replace(/\/+$/, "");
+}
+
+function setConfiguredApiBaseUrl(value) {
+  const normalized = value.trim().replace(/\/+$/, "");
+
+  if (normalized) {
+    localStorage.setItem("schemaApiBaseUrl", normalized);
+  } else {
+    localStorage.removeItem("schemaApiBaseUrl");
+  }
+
+  if (document.body?.dataset) {
+    document.body.dataset.apiBaseUrl = normalized;
+  }
+}
+
+function bindApiBaseUrlSetting() {
+  const input = document.getElementById("apiBaseUrl");
+  if (!input) return;
+
+  input.value = getConfiguredApiBaseUrl();
+
+  input.addEventListener("change", () => {
+    setConfiguredApiBaseUrl(input.value);
+    input.value = getConfiguredApiBaseUrl();
+  });
+}
+
 function bindResultsFullscreen() {
   const toggle = document.getElementById("resultsFullscreenToggle");
   const toggleIcon = document.getElementById("resultsFullscreenIcon");
@@ -623,6 +660,11 @@ function titleCase(str) {
   return str.replace(/[-_]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
+function resolveApiEndpoint(path) {
+  const normalizedBase = getConfiguredApiBaseUrl();
+  return `${normalizedBase}${path}`;
+}
+
 // ─── Generate ─────────────────────────────────────────────────────────────────
 async function handleGenerate() {
   const progressSection = document.getElementById("progressSection");
@@ -661,14 +703,21 @@ async function handleGenerate() {
   try {
     updateProgress(30, "Analysing content…");
 
-    const response = await fetch("/api/generate-schema", {
+    const response = await fetch(resolveApiEndpoint("/api/generate-schema"), {
       method: "POST",
       body: formData,
     });
 
     updateProgress(70, "Building schema…");
 
-    if (!response.ok) throw new Error(`Server error: ${response.status}`);
+    if (!response.ok) {
+      if (response.status === 405) {
+        throw new Error(
+          "Schema API rejected POST (405). Set window.__SCHEMA_API_BASE_URL__ to your backend URL.",
+        );
+      }
+      throw new Error(`Server error: ${response.status}`);
+    }
 
     const result = await response.json();
     updateProgress(100, "Complete!");
