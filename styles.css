@@ -825,6 +825,56 @@ main {
     font-size: 0.875em;
 }
 
+.upload-samples {
+    margin-top: 12px;
+    padding: 12px 14px;
+    border-radius: var(--radius-organic-soft);
+    border: 1px solid rgba(255,255,255,0.72);
+    background: linear-gradient(180deg, rgba(255,255,255,0.56), rgba(255,255,255,0.36));
+}
+
+.upload-samples-header {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--ink-mid);
+    margin-bottom: 8px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.upload-sample-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.sample-file-btn,
+.sample-all-btn {
+    border: 1px solid rgba(255,255,255,0.86);
+    background: rgba(255,255,255,0.72);
+    color: var(--ink-dark);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    border-radius: 999px;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.sample-file-btn:hover,
+.sample-all-btn:hover {
+    color: var(--moss);
+    border-color: rgba(255,255,255,1);
+    background: rgba(255,255,255,0.9);
+    transform: translateY(-1px);
+}
+
+.sample-all-btn {
+    margin-top: 10px;
+    background: linear-gradient(135deg, rgba(245, 180, 204, 0.68), rgba(255, 213, 177, 0.66));
+}
+
 /* ─── File List ─── */
 .file-list {
     margin-top: 12px;

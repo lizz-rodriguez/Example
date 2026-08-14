@@ -317,6 +317,7 @@ function bindLayoutCards() {
 function bindFileUpload() {
     const fileInput  = document.getElementById('fileInput');
     const uploadArea = document.getElementById('uploadArea');
+    const sampleBox  = document.getElementById('uploadSamples');
 
     fileInput.addEventListener('change', e => addFiles(Array.from(e.target.files)));
     uploadArea.addEventListener('dragover',  e => { e.preventDefault(); uploadArea.classList.add('dragover'); });
@@ -325,6 +326,77 @@ function bindFileUpload() {
         e.preventDefault();
         uploadArea.classList.remove('dragover');
         addFiles(Array.from(e.dataTransfer.files));
+    });
+
+    sampleBox?.addEventListener('click', event => {
+        const btn = event.target.closest('[data-sample-type]');
+        if (!btn) return;
+
+        const type = btn.dataset.sampleType;
+        if (!type) return;
+
+        const sampleTypes = type === 'all'
+            ? ['json', 'csv', 'xml', 'md', 'txt', 'doc', 'docx', 'pdf']
+            : [type];
+
+        const files = sampleTypes.map(buildSampleFile).filter(Boolean);
+        addFiles(files);
+    });
+}
+
+function buildSampleFile(type) {
+    const map = {
+        json: {
+            name: 'sample-products.json',
+            mime: 'application/json',
+            content: JSON.stringify([
+                { id: 1, name: 'Ocean Lamp', category: 'lighting', price: 49.99, in_stock: true },
+                { id: 2, name: 'Coral Shelf', category: 'storage', price: 89.0, in_stock: false }
+            ], null, 2)
+        },
+        csv: {
+            name: 'sample-orders.csv',
+            mime: 'text/csv',
+            content: 'order_id,customer,total,status\n1001,Avery,120.50,paid\n1002,Riley,88.00,pending\n1003,Jordan,42.75,shipped\n'
+        },
+        xml: {
+            name: 'sample-catalog.xml',
+            mime: 'application/xml',
+            content: '<catalog>\n  <item id="1">\n    <title>Wave Journal</title>\n    <author>Sam Lee</author>\n    <published>2026-07-20</published>\n  </item>\n  <item id="2">\n    <title>Sky Atlas</title>\n    <author>Jules Park</author>\n    <published>2026-08-01</published>\n  </item>\n</catalog>\n'
+        },
+        md: {
+            name: 'sample-notes.md',
+            mime: 'text/markdown',
+            content: '# Product Notes\n\n## Launch Checklist\n- Validate schema\n- Review field naming\n- Export SQL and JSON\n\n## Owners\n- Data Team\n- API Team\n'
+        },
+        txt: {
+            name: 'sample-support.txt',
+            mime: 'text/plain',
+            content: 'Support ticket summary:\nCustomer asked for order history, preferred language, and retention policy fields.\nInclude timestamps and status flags for records.\n'
+        },
+        doc: {
+            name: 'sample-policy.doc',
+            mime: 'application/msword',
+            content: 'Sample DOC content: policy overview, revision history, and approval owners.'
+        },
+        docx: {
+            name: 'sample-brief.docx',
+            mime: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            content: 'Sample DOCX content: project brief with objectives, milestones, and budget sections.'
+        },
+        pdf: {
+            name: 'sample-report.pdf',
+            mime: 'application/pdf',
+            content: 'Sample PDF content: monthly reporting summary and KPI notes.'
+        }
+    };
+
+    const sample = map[type];
+    if (!sample) return null;
+
+    return new File([sample.content], sample.name, {
+        type: sample.mime,
+        lastModified: Date.now()
     });
 }
 
