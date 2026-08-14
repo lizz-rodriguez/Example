@@ -78,21 +78,27 @@ http://localhost:3000
 ## Data Layout Templates
 
 ### Relational Standard (Recommended)
+
 Traditional normalized schema with foreign keys and relationships. Best for transactional business applications with complex data relationships.
 
 ### Analytical Warehouse
+
 Star schema optimized for data warehousing and business intelligence. Ideal for reporting and analytics workloads.
 
 ### Document Store
+
 Flexible JSON-based schema for MongoDB and NoSQL databases. Perfect for semi-structured or rapidly evolving data models.
 
 ### Denormalized Performance
+
 Optimized for read-heavy workloads with redundant data. Suitable for high-performance applications with minimal writes.
 
 ### Hybrid Multi-Model
+
 Combines relational and document models for maximum flexibility. Great for applications requiring both structured and unstructured data.
 
 ### Time-Series Data
+
 Optimized for temporal data with timestamps and metrics. Designed for IoT, monitoring, and analytics applications.
 
 ### Business Application Types
@@ -110,11 +116,13 @@ Optimized for temporal data with timestamps and metrics. Designed for IoT, monit
 - **Custom Business Logic**: Flexible schema for unique requirements
 
 ### `POST /api/generate-schema`
+
 Generate database schema from uploaded files
 
 **Request**: multipart/form-data with files and configuration
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -128,25 +136,30 @@ Generate database schema from uploaded files
 ```
 
 ### `GET /api/health`
+
 Check server status
 
 ### `GET /api/supported-types`
+
 Get list of supported file types and database options
 
 ## API Endpoints
 
 ### Basic Settings
+
 - **Project Name**: Name of your business application
 - **Application Type**: Template for database structure
 - **Database Platform**: Target database system
 - **Layout Template**: Professional schema design pattern
 
 ### Advanced Settings
+
 - **File Encoding**: UTF-8, ASCII, or Latin-1
 - **Table Prefix**: Add prefix to all table names (e.g., app_, tbl_, prod_)
 - **Max File Size**: Maximum upload size in MB (up to 500MB)
 
 ### Features
+
 - **Include Media**: Add asset management tables for files and images
 - **Include Audit Fields**: Add timestamps, authors, and version tracking
 - **Generate API Docs**: Plan for REST API endpoints
@@ -176,6 +189,7 @@ Get list of supported file types and database options
 ## Design Philosophy
 
 The application features a clean, professional light theme designed for business users:
+
 - Modern Shopify-inspired layout with card-based interface
 - Professional color palette (Shopify green primary: #008060)
 - Clear visual hierarchy with numbered steps
