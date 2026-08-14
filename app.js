@@ -21,30 +21,104 @@ const state = {
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+    initializeStepHeaders();
+    bindDocumentationModal();
     bindNavigation();
     bindInputMethod();
     bindLayoutCards();
     bindFileUpload();
     bindDirectoryUpload();
     bindAdvancedToggle();
+    bindResultsFullscreen();
     bindTabs();
     bindDownloads();
+    window.addEventListener('resize', queueViewportFit);
+    window.addEventListener('load', queueViewportFit);
+    if (document.fonts?.ready) document.fonts.ready.then(queueViewportFit);
     renderStep(1);
 });
 
+function bindDocumentationModal() {
+    const openButton = document.getElementById('documentationButton');
+    const modal = document.getElementById('documentationModal');
+    const closeButton = document.getElementById('documentationClose');
+    const backdrop = document.getElementById('documentationBackdrop');
+
+    if (!openButton || !modal || !closeButton || !backdrop) return;
+
+    const openModal = () => {
+        modal.classList.remove('hidden');
+    };
+
+    const closeModal = () => {
+        modal.classList.add('hidden');
+    };
+
+    openButton.addEventListener('click', openModal);
+    closeButton.addEventListener('click', closeModal);
+    backdrop.addEventListener('click', closeModal);
+
+    document.addEventListener('keydown', event => {
+        if (event.key !== 'Escape') return;
+        if (modal.classList.contains('hidden')) return;
+        closeModal();
+    });
+}
+
+function initializeStepHeaders() {
+    const stepperShell = document.getElementById('stepperShell');
+    const stepperSlots = document.querySelectorAll('.step-header-stepper');
+
+    if (!stepperShell || !stepperSlots.length) return;
+
+    stepperSlots.forEach(slot => {
+        slot.innerHTML = stepperShell.innerHTML;
+    });
+}
+
+let viewportFitFrame = 0;
+
+function queueViewportFit() {
+    cancelAnimationFrame(viewportFitFrame);
+    viewportFitFrame = requestAnimationFrame(() => {
+        viewportFitFrame = requestAnimationFrame(fitActiveStepToViewport);
+    });
+}
+
+function fitActiveStepToViewport() {
+    const stage = document.querySelector('.wizard-stage');
+    const activeStep = document.querySelector('.wizard-step.active');
+
+    if (!stage || !activeStep) return;
+
+    if (activeStep.id === 'step-6') {
+        activeStep.style.setProperty('--step-scale', '1');
+        return;
+    }
+
+    activeStep.style.setProperty('--step-scale', '1');
+
+    const availableHeight = stage.clientHeight;
+    const naturalHeight = activeStep.scrollHeight;
+
+    if (!availableHeight || !naturalHeight) return;
+
+    const scale = Math.min(1, availableHeight / naturalHeight);
+    activeStep.style.setProperty('--step-scale', scale.toFixed(3));
+}
+
 // ─── Step navigation ──────────────────────────────────────────────────────────
 function bindNavigation() {
-    // Next buttons
-    document.getElementById('next-1').addEventListener('click', () => tryAdvance(1));
-    document.getElementById('next-2').addEventListener('click', () => tryAdvance(2));
-    document.getElementById('next-3').addEventListener('click', () => tryAdvance(3));
-    document.getElementById('next-4').addEventListener('click', () => tryAdvance(4));
+    document.querySelectorAll('.step').forEach(stepEl => {
+        stepEl.addEventListener('click', () => navigateToStep(parseInt(stepEl.dataset.step, 10)));
+        stepEl.addEventListener('keydown', event => {
+            if (event.key !== 'Enter' && event.key !== ' ') return;
+            event.preventDefault();
+            navigateToStep(parseInt(stepEl.dataset.step, 10));
+        });
+    });
 
-    // Back buttons
-    document.getElementById('back-2').addEventListener('click', () => goTo(1));
-    document.getElementById('back-3').addEventListener('click', () => goTo(2));
-    document.getElementById('back-4').addEventListener('click', () => goTo(3));
-    document.getElementById('back-5').addEventListener('click', () => goTo(4));
+    document.getElementById('next-4').addEventListener('click', () => tryAdvance(4));
 
     // Generate button
     document.getElementById('submitBtn').addEventListener('click', handleGenerate);
@@ -57,6 +131,22 @@ function tryAdvance(fromStep) {
     if (!validateStep(fromStep)) return;
     collectStep(fromStep);
     goTo(fromStep + 1);
+}
+
+function navigateToStep(targetStep) {
+    if (targetStep === state.currentStep) return;
+
+    if (targetStep < state.currentStep) {
+        goTo(targetStep);
+        return;
+    }
+
+    for (let step = state.currentStep; step < targetStep; step += 1) {
+        if (!validateStep(step)) return;
+        collectStep(step);
+    }
+
+    goTo(targetStep);
 }
 
 function goTo(stepNumber) {
@@ -109,6 +199,7 @@ function renderStep(stepNumber) {
     // Step-specific setup
     if (stepNumber === 3) setupUploadStep();
     if (stepNumber === 5) renderReview();
+    queueViewportFit();
 }
 
 // ─── Validation ───────────────────────────────────────────────────────────────
@@ -171,11 +262,19 @@ function collectStep(step) {
 
 // ─── Input method ─────────────────────────────────────────────────────────────
 function bindInputMethod() {
-    document.querySelectorAll('input[name="inputMethod"]').forEach(r => {
-        r.addEventListener('change', () => {
-            state.inputMethod = r.value;
-            // If we're already on step 3, refresh it
+    document.querySelectorAll('.hero-radio').forEach(label => {
+        const input = label.querySelector('input[name="inputMethod"]');
+
+        input.addEventListener('change', () => {
+            state.inputMethod = input.value;
             if (state.currentStep === 3) setupUploadStep();
+        });
+
+        label.addEventListener('click', () => {
+            requestAnimationFrame(() => {
+                state.inputMethod = input.value;
+                if (state.currentStep === 1) tryAdvance(1);
+            });
         });
     });
 }
@@ -194,6 +293,8 @@ function setupUploadStep() {
         title.textContent    = 'Select a directory';
         subtitle.textContent = 'All supported files in the folder will be processed automatically.';
     }
+
+    queueViewportFit();
 }
 
 // ─── Layout cards ─────────────────────────────────────────────────────────────
@@ -204,6 +305,10 @@ function bindLayoutCards() {
             card.classList.add('selected');
             state.selectedLayout = card.dataset.layout;
             document.getElementById('selectedLayout').value = state.selectedLayout;
+
+            if (state.currentStep === 2) {
+                requestAnimationFrame(() => tryAdvance(2));
+            }
         });
     });
 }
@@ -231,11 +336,19 @@ function addFiles(files) {
                  state.selectedFiles.push(f);
          });
     renderFileList();
+
+    if (state.currentStep === 3 && state.selectedFiles.length > 0) {
+        requestAnimationFrame(() => tryAdvance(3));
+    }
 }
 
 function renderFileList() {
     const list = document.getElementById('fileList');
-    if (!state.selectedFiles.length) { list.innerHTML = ''; return; }
+    if (!state.selectedFiles.length) {
+        list.innerHTML = '';
+        queueViewportFit();
+        return;
+    }
     list.innerHTML = state.selectedFiles.map((f, i) => `
         <div class="file-item">
             <div class="file-info">
@@ -251,6 +364,7 @@ function renderFileList() {
             <button type="button" class="file-remove" onclick="removeFile(${i})">Remove</button>
         </div>
     `).join('');
+    queueViewportFit();
 }
 
 function removeFile(index) {
@@ -280,16 +394,49 @@ function bindDirectoryUpload() {
         document.getElementById('selectedPath').textContent = path;
         document.getElementById('fileCount').textContent = files.length;
         document.getElementById('directoryInfo').classList.remove('hidden');
+        queueViewportFit();
+
+        if (state.currentStep === 3) {
+            requestAnimationFrame(() => tryAdvance(3));
+        }
     });
 }
 
 // ─── Advanced toggle ──────────────────────────────────────────────────────────
 function bindAdvancedToggle() {
-    document.getElementById('advancedToggle').addEventListener('click', () => {
-        const opts = document.getElementById('advancedOptions');
-        const icon = document.querySelector('#advancedToggle .toggle-icon');
-        opts.classList.toggle('hidden');
-        icon.style.transform = opts.classList.contains('hidden') ? '' : 'rotate(180deg)';
+    const slider = document.getElementById('configSlider');
+    const openButton = document.getElementById('advancedToggle');
+    const backButton = document.getElementById('advancedBack');
+
+    openButton.addEventListener('click', () => {
+        slider.classList.add('show-advanced');
+        queueViewportFit();
+    });
+
+    backButton.addEventListener('click', () => {
+        slider.classList.remove('show-advanced');
+        queueViewportFit();
+    });
+}
+
+function bindResultsFullscreen() {
+    const toggle = document.getElementById('resultsFullscreenToggle');
+    const toggleIcon = document.getElementById('resultsFullscreenIcon');
+    const resultsBody = document.querySelector('.results-step-body');
+    const resultsStep = document.getElementById('step-6');
+
+    if (!toggle || !toggleIcon || !resultsBody || !resultsStep) return;
+
+    toggle.addEventListener('click', () => {
+        const isFullscreen = resultsBody.classList.toggle('is-fullscreen');
+        resultsStep.classList.toggle('is-fullscreen-host', isFullscreen);
+        toggleIcon.classList.add('fa-solid');
+        toggleIcon.classList.remove('fa-regular');
+        toggleIcon.classList.toggle('fa-expand', !isFullscreen);
+        toggleIcon.classList.toggle('fa-compress', isFullscreen);
+        toggle.setAttribute('aria-label', isFullscreen ? 'Exit full page mode' : 'Enter full page mode');
+        toggle.setAttribute('title', isFullscreen ? 'Minimize full page' : 'Full page');
+        queueViewportFit();
     });
 }
 
@@ -334,6 +481,8 @@ function renderReview() {
             </div>
         </div>
     `;
+
+    queueViewportFit();
 }
 
 function titleCase(str) {
@@ -351,6 +500,7 @@ async function handleGenerate() {
     submitBtn.disabled = true;
     btnText.textContent = 'Generating…';
     btnLoader.classList.remove('hidden');
+    queueViewportFit();
 
     updateProgress(10, 'Uploading files…');
 
@@ -395,6 +545,12 @@ async function handleGenerate() {
             btnLoader.classList.add('hidden');
             displayResults(result);
             goTo(6);
+            requestAnimationFrame(() => {
+                launchCandyConfetti({ count: 140, x: window.innerWidth * 0.5, y: Math.max(120, window.innerHeight * 0.3) });
+                window.setTimeout(() => {
+                    launchCandyConfetti({ count: 92, x: window.innerWidth * 0.56, y: Math.max(140, window.innerHeight * 0.35) });
+                }, 240);
+            });
         }, 500);
 
     } catch (err) {
@@ -405,6 +561,7 @@ async function handleGenerate() {
         btnText.textContent = 'Generate Schema';
         btnLoader.classList.add('hidden');
         updateProgress(0, '');
+        queueViewportFit();
     }
 }
 
@@ -460,6 +617,7 @@ function bindTabs() {
             const el = document.getElementById(tab + 'Tab');
             el.classList.remove('hidden');
             el.classList.add('active');
+            queueViewportFit();
         });
     });
 }
@@ -491,9 +649,115 @@ function bindDownloads() {
                     filename = `${schema.projectName}_types.ts`;
                     mime     = 'text/plain'; break;
             }
+            const rect = btn.getBoundingClientRect();
+            launchHeartBubbles({
+                count: 20,
+                x: rect.left + rect.width / 2,
+                y: rect.top + rect.height / 2,
+            });
+
             downloadFile(content, filename, mime);
         });
     });
+}
+
+function launchCandyConfetti(options = {}) {
+    const layer = getConfettiLayer();
+    const count = options.count || 80;
+    const originX = options.x || window.innerWidth / 2;
+    const originY = options.y || window.innerHeight * 0.32;
+    const palette = ['#ff5fab', '#ff9863', '#ffe267', '#59d6ff', '#8ef1d8', '#b99dff', '#ffffff'];
+
+    for (let i = 0; i < count; i += 1) {
+        const piece = document.createElement('span');
+        piece.className = 'candy-confetti';
+
+        if (i % 3 === 0) piece.classList.add('candy-confetti-circle');
+        if (i % 5 === 0) piece.classList.add('candy-confetti-ribbon');
+
+        const size = 10 + Math.random() * 12;
+        const drift = (Math.random() - 0.5) * 440;
+        const lift = -(180 + Math.random() * 260);
+        const settle = drift * (1.42 + Math.random() * 0.34);
+        const fall = 300 + Math.random() * 360;
+        const spin = `${Math.round((Math.random() - 0.5) * 980)}deg`;
+        const duration = 1250 + Math.random() * 980;
+        const delay = Math.random() * 160;
+
+        piece.style.left = `${originX}px`;
+        piece.style.top = `${originY}px`;
+        piece.style.setProperty('--size', `${size}px`);
+        piece.style.setProperty('--x1', `${drift}px`);
+        piece.style.setProperty('--y1', `${lift}px`);
+        piece.style.setProperty('--x2', `${settle}px`);
+        piece.style.setProperty('--y2', `${fall}px`);
+        piece.style.setProperty('--rot', spin);
+        piece.style.setProperty('--dur', `${duration}ms`);
+        piece.style.setProperty('--delay', `${delay}ms`);
+        piece.style.background = palette[Math.floor(Math.random() * palette.length)];
+        if (Math.random() < 0.24) piece.classList.add('candy-confetti-glow');
+
+        layer.appendChild(piece);
+        window.setTimeout(() => piece.remove(), duration + delay + 120);
+    }
+}
+
+function getConfettiLayer() {
+    let layer = document.getElementById('confettiLayer');
+    if (layer) return layer;
+
+    layer = document.createElement('div');
+    layer.id = 'confettiLayer';
+    layer.className = 'confetti-layer';
+    layer.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(layer);
+    return layer;
+}
+
+function launchHeartBubbles(options = {}) {
+    const layer = getHeartBubbleLayer();
+    const count = options.count || 18;
+    const originX = options.x || window.innerWidth / 2;
+    const originY = options.y || window.innerHeight * 0.6;
+    const palette = ['#ff68ad', '#ff96cc', '#ff8a8a', '#ffc4de', '#ffd5ef'];
+
+    for (let i = 0; i < count; i += 1) {
+        const bubble = document.createElement('span');
+        bubble.className = 'heart-bubble';
+
+        const size = 16 + Math.random() * 18;
+        const drift = (Math.random() - 0.5) * 180;
+        const rise = -(170 + Math.random() * 150);
+        const spin = `${Math.round((Math.random() - 0.5) * 12)}deg`;
+        const duration = 2600 + Math.random() * 1600;
+        const delay = Math.random() * 280;
+
+        bubble.style.left = `${originX}px`;
+        bubble.style.top = `${originY}px`;
+        bubble.style.setProperty('--bubble-size', `${size}px`);
+        bubble.style.setProperty('--heart-size', `${Math.round(size * 0.52)}px`);
+        bubble.style.setProperty('--x', `${drift}px`);
+        bubble.style.setProperty('--y', `${rise}px`);
+        bubble.style.setProperty('--rot', spin);
+        bubble.style.setProperty('--dur', `${duration}ms`);
+        bubble.style.setProperty('--delay', `${delay}ms`);
+        bubble.style.setProperty('--heart-color', palette[Math.floor(Math.random() * palette.length)]);
+
+        layer.appendChild(bubble);
+        window.setTimeout(() => bubble.remove(), duration + delay + 180);
+    }
+}
+
+function getHeartBubbleLayer() {
+    let layer = document.getElementById('heartBubbleLayer');
+    if (layer) return layer;
+
+    layer = document.createElement('div');
+    layer.id = 'heartBubbleLayer';
+    layer.className = 'heart-bubble-layer';
+    layer.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(layer);
+    return layer;
 }
 
 function generatePrismaSchema(schema) {
