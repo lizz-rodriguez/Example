@@ -673,7 +673,7 @@
                               </option>
                             </select>
                           </div>
-                          <div class="hero-form-group">
+                          <div class="hero-form-group config-max-file-field">
                             <label for="maxFileSize" class="hero-label"
                               >Maximum File Size (MB)</label
                             >
@@ -686,41 +686,39 @@
                               class="hero-input"
                             />
                           </div>
-                          <div
-                            class="hero-form-group config-advanced-grid-wide"
-                          >
-                            <label for="tablePrefix" class="hero-label"
-                              >Table Naming Prefix</label
-                            >
-                            <input
-                              type="text"
-                              id="tablePrefix"
-                              placeholder="e.g., app_, tbl_"
-                              class="hero-input"
-                            />
-                            <p class="help-text">
-                              Optional prefix for all generated table names
-                            </p>
-                          </div>
-                          <div
-                            class="hero-form-group config-advanced-grid-wide"
-                          >
-                            <label for="apiBaseUrl" class="hero-label"
-                              >Schema API Base URL</label
-                            >
-                            <input
-                              type="url"
-                              id="apiBaseUrl"
-                              placeholder="https://your-backend-domain.com"
-                              class="hero-input"
-                              inputmode="url"
-                              autocomplete="off"
-                              spellcheck="false"
-                            />
-                            <p class="help-text">
-                              Optional for deployed frontend. Leave blank to use
-                              the same domain.
-                            </p>
+                          <div class="config-api-row">
+                            <div class="hero-form-group config-prefix-field">
+                              <label for="tablePrefix" class="hero-label"
+                                >Table Naming Prefix</label
+                              >
+                              <input
+                                type="text"
+                                id="tablePrefix"
+                                placeholder="e.g., app_, tbl_"
+                                class="hero-input"
+                              />
+                              <p class="help-text">
+                                Optional prefix for all generated table names
+                              </p>
+                            </div>
+                            <div class="hero-form-group config-api-field">
+                              <label for="apiBaseUrl" class="hero-label"
+                                >Schema API Base URL</label
+                              >
+                              <input
+                                type="url"
+                                id="apiBaseUrl"
+                                placeholder="https://your-backend-domain.com"
+                                class="hero-input"
+                                inputmode="url"
+                                autocomplete="off"
+                                spellcheck="false"
+                              />
+                              <p class="help-text">
+                                Optional for deployed frontend. Leave blank to
+                                use the same domain.
+                              </p>
+                            </div>
                           </div>
                         </div>
 
